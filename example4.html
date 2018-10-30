@@ -1,0 +1,42 @@
+<div id="app">
+  <comp-1></comp-1>
+  <comp-2></comp-2>
+</div>
+
+<script src="https://unpkg.com/vue"></script>
+<script type="module">
+import('./index.js').then(({ hooks, useData, useMounted, useWatch, useComputed }) => {
+  Vue.use(hooks);
+
+const data = useData({
+  count: 0
+});
+
+const double = useComputed(() => data.count * 2);
+
+Vue.component('comp-1', {
+  template: `
+    <h1>Component 1</h1>
+    <div>count is: {{ data.count }}</div>
+    <div>double is: {{ double }}</div>
+    <button @click="data.count++">count++</button>
+  `,
+  hooks: () => { data, double }
+});
+
+Vue.component('comp-2', {
+  template: `
+    <h1>Component 2</h1>
+    <div>count is: {{ data.count }}</div>
+    <div>double is: {{ double }}</div>
+    <button @click="data.count++">count++</button>
+  `,
+  hooks: () => { data, double }
+});
+
+new Vue({
+  el: "#app"
+});
+
+})
+</script>
